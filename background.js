@@ -68,10 +68,21 @@ const createWindow = () => {
         }
     })
     myWindow = win
-    if(process.resourcesPath.indexOf('\\node_modules\\') != -1)
-        win.loadURL('http://localhost:5173/')
-    else
-        win.loadFile(indexHtml)
+    if (process.platform === 'win32') {
+        // Windows
+        if (process.resourcesPath.includes('\\node_modules\\')) {
+            win.loadURL('http://localhost:5173/');
+        } else {
+            win.loadFile(indexHtml);
+        }
+    } else {
+        // macOS or other platforms
+        if (process.resourcesPath.includes('/node_modules/')) {
+            win.loadURL('http://localhost:5173/');
+        } else {
+            win.loadFile(indexHtml);
+        }
+    }
     win.once('ready-to-show', () => {
         win.show()
         if(process.resourcesPath.indexOf('\\node_modules\\') == -1) {
